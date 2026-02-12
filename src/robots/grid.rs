@@ -33,7 +33,7 @@ impl CardinalDirection {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Coord {
     x: usize,
     y: usize,
@@ -45,6 +45,7 @@ impl fmt::Debug for Coord {
 }
 
 // A horizontal wall blocks horizontal movement so is rendered vertically 
+#[derive(PartialEq, Eq)]
 pub struct Wall {
     direction: Direction,
     coord: Coord,
@@ -66,6 +67,7 @@ pub struct Grid {
     pub move_maps: HashMap<CardinalDirection, Vec<Vec<Coord>>>
 }
 
+#[derive(PartialEq, Eq)]
 pub enum RobotName {
     Red,
     Green,
@@ -146,12 +148,50 @@ impl Grid {
         }
         Grid { width, height, walls, move_maps }
     }
+
+    pub fn move_lookup(&self, start: &Coord, direction: &CardinalDirection) -> Coord {
+        self.move_maps.get(&direction).unwrap()[start.y][start.x]
+    }
 }
 
 impl Position {
-    fn moves(&self) -> Vec<Move> {
+    pub fn move_lookup(&self, start: &Coord, direction: CardinalDirection) -> Coord {
         // Use grid move lookup map to see where robot can move unconstrained
         // Check for other robots blocking the path to these unconstrained move squares
+        let mut unconstrained_end = self.grid.move_lookup(start, &direction);
+        match direction {
+            CardinalDirection::Down =>{for robot in &self.robots {
+                if robot.pos.x == unconstrained_end.x && start.y < robot.pos.y && robot.pos.y <= unconstrained_end.y {
+                    unconstrained_end.y = robot.pos.y - 1;
+                }
+            }},
+            CardinalDirection::Up =>{for robot in &self.robots {
+                if robot.pos.x == unconstrained_end.x && start.y > robot.pos.y && robot.pos.y >= unconstrained_end.y {
+                    unconstrained_end.y = robot.pos.y + 1;
+                }
+            }},
+            CardinalDirection::Right =>{for robot in &self.robots {
+                if robot.pos.y == unconstrained_end.y && start.x < robot.pos.x && robot.pos.x <= unconstrained_end.x {
+                    unconstrained_end.y = robot.pos.y - 1;
+                }
+            }},
+            CardinalDirection::Left =>{for robot in &self.robots {
+                if robot.pos.y == unconstrained_end.y && start.x > robot.pos.x && robot.pos.x >= unconstrained_end.x {
+                    unconstrained_end.y = robot.pos.y + 1;
+                }
+            }},
+        };
+        unconstrained_end
+    }
+
+    pub fn where_is(&self, robot_name: RobotName) -> Coord {
+        self.robots.iter().filter(|r| r.name == robot_name).nth(1).unwrap().pos
+    }
+
+    pub fn moves(&self) -> Vec<Move> {
+        // For each robot consider each cardinal direction
+        // If moving in that direction does not leave them stuck, add to moveset.
+
         panic!();
     }
 }
