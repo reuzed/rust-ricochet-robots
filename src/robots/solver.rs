@@ -1,0 +1,1 @@
+// Do DFS, try all moves until finding a winning position

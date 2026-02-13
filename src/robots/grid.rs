@@ -2,13 +2,13 @@
 
 use std::{collections::HashMap, fmt};
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone)]
 pub enum Direction {
     Horizontal, 
     Vertical,
 }
 
-#[derive(PartialEq, Eq, Hash, Clone, Debug)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum CardinalDirection {
     Up,
     Down,
@@ -45,7 +45,7 @@ impl fmt::Debug for Coord {
 }
 
 // A horizontal wall blocks horizontal movement so is rendered vertically 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct Wall {
     direction: Direction,
     coord: Coord,
@@ -60,6 +60,7 @@ impl Wall {
     }
 }
 
+#[derive(Clone)]
 pub struct Grid {
     width: usize,
     height: usize,
@@ -67,7 +68,7 @@ pub struct Grid {
     pub move_maps: HashMap<CardinalDirection, Vec<Vec<Coord>>>
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone, Copy)]
 pub enum RobotName {
     Red,
     Green,
@@ -76,6 +77,7 @@ pub enum RobotName {
     Silver,
 }
 
+#[derive(Clone)]
 pub struct Robot {
     name: RobotName,
     pos: Coord,
@@ -89,6 +91,7 @@ pub struct Move {
     name: RobotName,
     start: Coord,
     end: Coord,
+    direction: CardinalDirection,
 }
 
 // Build lookup maps for moving up down left and right from each square in grid
@@ -191,8 +194,25 @@ impl Position {
     pub fn moves(&self) -> Vec<Move> {
         // For each robot consider each cardinal direction
         // If moving in that direction does not leave them stuck, add to moveset.
+        let mut moveset: Vec<Move> = vec![];
+        for robot in &self.robots {
+            for direction in [CardinalDirection::Down, CardinalDirection::Left, CardinalDirection::Up, CardinalDirection::Right] {
+                let robot_name = robot.name;
+                let start = robot.pos;
+                let end = self.move_lookup(&start, direction);
+                if start == end {
+                    continue;
+                }
+                moveset.push(Move { name: robot_name, start, end, direction });
+            }
+        }
+        moveset
+    }
 
-        panic!();
+    pub fn make_move(&self, robot_move: Move) -> Position {
+        let mut robots: Vec<Robot> = self.robots.clone().into_iter().filter(|r| r.name == robot_move.name).collect();
+        robots.push(Robot { name: robot_move.name, pos: robot_move.end });
+        Position { grid: self.grid.clone(), robots: robots }
     }
 }
 
