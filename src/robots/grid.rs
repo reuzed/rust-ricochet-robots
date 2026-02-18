@@ -33,7 +33,7 @@ impl CardinalDirection {
     }
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Coord {
     x: usize,
     y: usize,
@@ -81,7 +81,7 @@ impl std::hash::Hash for Grid {
     }
 }
 
-#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug, PartialOrd, Ord)]
 pub enum RobotName {
     Red,
     Green,
@@ -91,7 +91,7 @@ pub enum RobotName {
 }
 
 // Type for robots and targets
-#[derive(Clone, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, PartialEq, Eq, Hash, Debug, PartialOrd, Ord)]
 pub struct Robot {
     name: RobotName,
     pos: Coord,
@@ -105,7 +105,7 @@ impl Robot {
     }
 }
 
-#[derive(PartialEq, Eq, Hash, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Position {
     pub grid: Arc<Grid>,
     pub robots: Vec<Robot>,
@@ -113,6 +113,11 @@ pub struct Position {
 impl fmt::Display for Position {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Grid:\n{} Robots:\n{:?}", self.grid, self.robots)
+    }
+}
+impl std::hash::Hash for Position {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.robots.hash(state);
     }
 }
 
@@ -269,7 +274,7 @@ impl Position {
                         && start.x < robot.pos.x
                         && robot.pos.x <= unconstrained_end.x
                     {
-                        unconstrained_end.y = robot.pos.x - 1;
+                        unconstrained_end.x = robot.pos.x - 1;
                     }
                 }
             }
@@ -279,7 +284,7 @@ impl Position {
                         && start.x > robot.pos.x
                         && robot.pos.x >= unconstrained_end.x
                     {
-                        unconstrained_end.y = robot.pos.x + 1;
+                        unconstrained_end.x = robot.pos.x + 1;
                     }
                 }
             }
@@ -291,7 +296,7 @@ impl Position {
         self.robots
             .iter()
             .filter(|r| r.name == robot_name)
-            .nth(1)
+            .nth(0)
             .unwrap()
             .pos
     }
@@ -335,6 +340,7 @@ impl Position {
             name: robot_move.name,
             pos: robot_move.end,
         });
+        robots.sort();
         Position {
             grid: self.grid.clone(),
             robots: robots,

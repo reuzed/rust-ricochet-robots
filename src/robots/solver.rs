@@ -1,4 +1,6 @@
-use std::collections::{HashMap, HashSet, VecDeque};
+use std::collections::{HashSet, VecDeque};
+
+use rustc_hash::{FxHashMap, FxHashSet};
 
 use super::grid::{Move, Position, Robot};
 
@@ -59,10 +61,10 @@ enum PositionState {
 
 pub struct BfsData {
     positions: Vec<Position>,
-    positions_hash: HashSet<Position>,
+    positions_hash: FxHashSet<Position>,
     queue: VecDeque<usize>,
-    prev: HashMap<usize, usize>,
-    state: HashMap<usize, PositionState>,
+    prev: FxHashMap<usize, usize>,
+    state: FxHashMap<usize, PositionState>,
 }
 
 impl BfsData {
@@ -81,10 +83,14 @@ impl BfsData {
 pub fn solve_2(position: Position, target: Robot) -> BfsData { 
     let mut data = BfsData {
         positions: vec![position.clone()],
-        positions_hash: HashSet::from([position.clone()]),
+        positions_hash: {
+            let mut p = FxHashSet::default();
+            p.insert(position.clone());
+            p
+        },
         queue: VecDeque::from([0]),
-        prev: HashMap::new(),
-        state: HashMap::new(),
+        prev: FxHashMap::default(),
+        state: FxHashMap::default(),
     };
 
     let mut new_move_count_index = 0;
