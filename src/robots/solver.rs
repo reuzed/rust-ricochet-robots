@@ -52,31 +52,17 @@ pub fn solve(position: Position, target: Robot) -> Vec<(Vec<Move>, Position)> {
     solved_positions
 }
 
-#[derive(PartialEq, Eq)]
-enum PositionState {
-    Unexplored,
-    Explored,
-    Solved,
-}
-
 pub struct BfsData {
     positions: Vec<Position>,
     positions_hash: FxHashSet<Position>,
     queue: VecDeque<usize>,
     prev: FxHashMap<usize, usize>,
-    state: FxHashMap<usize, PositionState>,
+    solved_positions: Vec<usize>
 }
 
 impl BfsData {
-    fn solved_positions(&self) -> Vec<Position> {
-        self.positions.iter().enumerate().filter(
-            |&(i, _)| self.state.get(&i) == Some(&PositionState::Solved)
-        ).map(|(_, p)| p.clone()).collect()
-    }
     fn solutions_count(&self) -> usize {
-        self.positions.iter().enumerate().filter(
-            |&(i, _)| self.state.get(&i) == Some(&PositionState::Solved)
-        ).count()
+        self.solved_positions.len()
     }
 }
 
@@ -90,7 +76,7 @@ pub fn solve_2(position: Position, target: Robot) -> BfsData {
         },
         queue: VecDeque::from([0]),
         prev: FxHashMap::default(),
-        state: FxHashMap::default(),
+        solved_positions: Vec::new(),
     };
 
     let mut new_move_count_index = 0;
@@ -111,10 +97,7 @@ pub fn solve_2(position: Position, target: Robot) -> BfsData {
         let pos = &data.positions[i].clone();
         if is_solved(&pos, &target) {
             println!("Solved !");
-            data.state.insert(i, PositionState::Solved);
-        }
-        else {
-            data.state.insert(i, PositionState::Explored);
+            data.solved_positions.push(i);
         }
         for robot_move in pos.moves() {
             let new_position = pos.make_move(&robot_move);

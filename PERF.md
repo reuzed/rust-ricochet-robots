@@ -74,7 +74,7 @@ Move number (6) 36958. Visited: 264261, Current: 227302, Solved: 0, Time: 2.1018
 Move number (7) 264261. Visited: 1377314, Current: 1113052, Solved: 0, Time: 13.629264297s
 Move number (8) 1377314. Visited: 5558009, Current: 4180694, Solved: 0, Time: 66.170398744s
 
-Also sort robots, kills many states
+Also sort robots, kills many states (20x speedup)
 Move number (1) 0. Visited: 1, Current: 0, Solved: 0, Time: 1.05µs
 Move number (2) 1. Visited: 19, Current: 17, Solved: 0, Time: 118.482µs
 Move number (3) 19. Visited: 182, Current: 162, Solved: 0, Time: 1.299463ms
@@ -85,7 +85,7 @@ Move number (7) 23479. Visited: 84842, Current: 61362, Solved: 0, Time: 1.128519
 Move number (8) 84842. Visited: 279655, Current: 194812, Solved: 0, Time: 3.977620748s
 Move number (9) 279655. Visited: 858034, Current: 578378, Solved: 0, Time: 11.689974943s
 
-Add Fx hasher:
+Add Fx hasher: (1.5x speedup)
 Move number (1) 0. Visited: 1, Current: 0, Solved: 0, Time: 1.051µs
 Move number (2) 1. Visited: 19, Current: 17, Solved: 0, Time: 117.238µs
 Move number (3) 19. Visited: 182, Current: 162, Solved: 0, Time: 897.572µs
@@ -98,3 +98,17 @@ Move number (9) 279655. Visited: 858034, Current: 578378, Solved: 0, Time: 7.561
 Move number (10) 858034. Visited: 2477413, Current: 1619378, Solved: 0, Time: 23.644767162s
 Move number (11) 2477413. Visited: 6772484, Current: 4295070, Solved: 0, Time: 67.332708532s
 Move number (12) 6772484. Visited: 17575568, Current: 10803083, Solved: 3, Time: 201.634888383s
+
+Release flag + remove a hashmap:
+Move number 0. Visited: 1, Current: 0, Solved: 0, Time: 100ns
+Move number 1. Visited: 19, Current: 17, Solved: 0, Time: 25.035µs
+Move number 19. Visited: 182, Current: 162, Solved: 0, Time: 152.615µs
+Move number 182. Visited: 1162, Current: 979, Solved: 0, Time: 961.988µs
+Move number 1162. Visited: 5721, Current: 4558, Solved: 0, Time: 5.675873ms
+Move number 5721. Visited: 23479, Current: 17757, Solved: 0, Time: 29.166712ms
+Move number 23479. Visited: 84842, Current: 61362, Solved: 0, Time: 134.047393ms
+Move number 84842. Visited: 279655, Current: 194812, Solved: 0, Time: 510.331337ms
+Move number 279655. Visited: 858034, Current: 578378, Solved: 0, Time: 1.771778763s
+Move number 858034. Visited: 2477413, Current: 1619378, Solved: 0, Time: 5.909403117s
+Move number 2477413. Visited: 6772484, Current: 4295070, Solved: 0, Time: 17.291232729s
+Move number 6772484. Visited: 17575568, Current: 10803083, Solved: 3, Time: 53.204778421s
