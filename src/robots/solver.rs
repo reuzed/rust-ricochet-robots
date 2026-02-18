@@ -18,8 +18,9 @@ pub fn solve(position: Position, target: Robot) -> Vec<(Vec<Move>, Position)> {
     let mut visited_positions: HashSet<Position> = HashSet::new();
     let mut current_positions: Vec<(Vec<Move>, Position)> = vec![(Vec::new(), position)];
     let mut solved_positions: Vec<(Vec<Move>, Position)> = Vec::new();
+    let start_time = std::time::Instant::now();
     for i in 0..MAX_MOVES {
-        println!("Move number {i}. Visited: {}, Current: {}, Solved: {}", visited_positions.len(), current_positions.len(), solved_positions.len());
+        println!("Move number {i}. Visited: {}, Current: {}, Solved: {}, Time: {:?}", visited_positions.len(), current_positions.len(), solved_positions.len(), start_time.elapsed());
         let mut new_positions: Vec<(Vec<Move>, Position)> = Vec::new();
         for m_p in current_positions {
             let moves = m_p.0;
