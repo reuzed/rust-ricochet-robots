@@ -35,9 +35,20 @@ Move number 4. Visited: 3888, Current: 64568, Solved: 0, Time: 423.231252ms, Log
 Move number 5. Visited: 38412, Current: 796791, Solved: 0, Time: 5.971249215s, Log current: 4.5359015
 Move number 6. Visited: 282787, Current: 8453116, Solved: 0, Time: 75.154204164s, Log current: 5.324256
 
-New solver approach:
+## New solver approach
+
 Move number (1) 0. Visited: 1, Current: 0, Solved: 0, Time: 810ns
 Move number (2) 1. Visited: 19, Current: 17, Solved: 0, Time: 57.347µs
 Move number (3) 19. Visited: 304, Current: 284, Solved: 0, Time: 3.176123ms
 Move number (4) 304. Visited: 3888, Current: 3583, Solved: 0, Time: 431.13857ms
 Move number (5) 3888. Visited: 38412, Current: 34523, Solved: 0, Time: 47.210800057s
+
+Add hashset:
+Move number (1) 0. Visited: 1, Current: 0, Solved: 0, Time: 806ns
+Move number (2) 1. Visited: 19, Current: 17, Solved: 0, Time: 317.994µs
+Move number (3) 19. Visited: 304, Current: 284, Solved: 0, Time: 6.886989ms
+Move number (4) 304. Visited: 3888, Current: 3583, Solved: 0, Time: 84.409343ms
+Move number (5) 3888. Visited: 38412, Current: 34523, Solved: 0, Time: 731.903213ms
+Move number (6) 38412. Visited: 282787, Current: 244374, Solved: 0, Time: 5.851275383s
+Move number (7) 282787. Visited: 1527926, Current: 1245138, Solved: 0, Time: 36.363213231s
+Move number (8) 1527926. Visited: 6354846, Current: 4826919, Solved: 0, Time: 175.264441683s

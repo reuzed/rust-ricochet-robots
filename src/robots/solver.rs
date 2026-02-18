@@ -59,7 +59,7 @@ enum PositionState {
 
 pub struct BfsData {
     positions: Vec<Position>,
-    // positions_hash: HashSet<Position>,
+    positions_hash: HashSet<Position>,
     queue: VecDeque<usize>,
     prev: HashMap<usize, usize>,
     state: HashMap<usize, PositionState>,
@@ -81,6 +81,7 @@ impl BfsData {
 pub fn solve_2(position: Position, target: Robot) -> BfsData { 
     let mut data = BfsData {
         positions: vec![position.clone()],
+        positions_hash: HashSet::from([position.clone()]),
         queue: VecDeque::from([0]),
         prev: HashMap::new(),
         state: HashMap::new(),
@@ -111,12 +112,13 @@ pub fn solve_2(position: Position, target: Robot) -> BfsData {
         }
         for robot_move in pos.moves() {
             let new_position = pos.make_move(&robot_move);
-            if data.positions.contains(&new_position) {
+            if data.positions_hash.contains(&new_position) {
                 continue
             } 
             let j = data.positions.len(); // Index of new position in data.positions
             data.queue.push_back(j); // Queue new position for processing
-            data.positions.push(new_position); // Add the position
+            data.positions.push(new_position.clone()); // Add the position
+            data.positions_hash.insert(new_position);
             data.prev.insert(j, i); // Link to where the position came from
         }
     }
