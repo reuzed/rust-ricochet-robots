@@ -1,6 +1,6 @@
 // Define types for grids, and their contents
 
-use std::{collections::HashMap, fmt};
+use std::{collections::HashMap, fmt, sync::Arc};
 
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub enum Direction {
@@ -107,7 +107,7 @@ impl Robot {
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 pub struct Position {
-    pub grid: Grid,
+    pub grid: Arc<Grid>,
     pub robots: Vec<Robot>,
 }
 impl fmt::Display for Position {

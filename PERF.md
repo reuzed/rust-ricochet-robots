@@ -23,3 +23,14 @@ Move number 2. Visited: 19, Current: 299, Solved: 0, Time: 7.926348ms, Log curre
 Move number 3. Visited: 304, Current: 4617, Solved: 0, Time: 134.804486ms, Log current: 2.8165066
 Move number 4. Visited: 3888, Current: 64568, Solved: 0, Time: 1.754839735s, Log current: 3.697084
 Move number 5. Visited: 38412, Current: 796791, Solved: 0, Time: 24.307849681s, Log current: 4.5359015
+
+## Don't clone grid (5x speedup)
+
+Instead of cloning Grid, use `Arc<Grid>` to share reference.
+Move number 0. Visited: 0, Current: 1, Solved: 0, Time: 194ns, Log current: 0
+Move number 1. Visited: 1, Current: 18, Solved: 0, Time: 99.417µs, Log current: 0.9648298
+Move number 2. Visited: 19, Current: 299, Solved: 0, Time: 2.108195ms, Log current: 1.9028548
+Move number 3. Visited: 304, Current: 4617, Solved: 0, Time: 33.223139ms, Log current: 2.8165066
+Move number 4. Visited: 3888, Current: 64568, Solved: 0, Time: 423.231252ms, Log current: 3.697084
+Move number 5. Visited: 38412, Current: 796791, Solved: 0, Time: 5.971249215s, Log current: 4.5359015
+Move number 6. Visited: 282787, Current: 8453116, Solved: 0, Time: 75.154204164s, Log current: 5.324256

@@ -11,6 +11,18 @@ fn is_solved(position: &Position, target: &Robot) -> bool {
     false
 }
 
+
+enum PositionState {
+    Unexplored,
+    Explored,
+    Solved,
+}
+
+struct PostitionData<'a>{
+    prev: Option<&'a Position>,
+    state: PositionState,
+}
+
 const MAX_MOVES: u32 = 20;
 // Do BFS, try all moves until finding a winning position
 pub fn solve(position: Position, target: Robot) -> Vec<(Vec<Move>, Position)> {

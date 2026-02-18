@@ -50,7 +50,7 @@ pub fn generate_random_position(
         .into_iter()
         .collect();
     Position {
-        grid: generate_random_grid(width, height, wall_count, rng),
+        grid: generate_random_grid(width, height, wall_count, rng).into(),
         robots,
     }
 }
