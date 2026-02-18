@@ -19,7 +19,7 @@ async fn echo_route(Json(req): Json<TestRequest>) -> impl IntoResponse {
 async fn main() -> Result<(), Error> {
     tracing::init_default_subscriber();
 
-    let app= Router::new()
+    let app = Router::new()
         .route("/", get(health_route))
         .route("/echo", post(echo_route));
 

@@ -1,4 +1,4 @@
-use std::collections::{HashSet};
+use std::collections::HashSet;
 
 use super::grid::{Move, Position, Robot};
 
@@ -21,8 +21,14 @@ pub fn solve(position: Position, target: Robot) -> Vec<(Vec<Move>, Position)> {
     let mut solved_positions: Vec<(Vec<Move>, Position)> = Vec::new();
     let start_time = std::time::Instant::now();
     for i in 0..MAX_MOVES {
-        println!("Move number {i}. Visited: {}, Current: {}, Solved: {}, Time: {:?}, Log current: {}", 
-          visited_positions.len(), current_positions.len(), solved_positions.len(), start_time.elapsed(), f32::log(current_positions.len() as f32, 20.0));
+        println!(
+            "Move number {i}. Visited: {}, Current: {}, Solved: {}, Time: {:?}, Log current: {}",
+            visited_positions.len(),
+            current_positions.len(),
+            solved_positions.len(),
+            start_time.elapsed(),
+            f32::log(current_positions.len() as f32, 20.0)
+        );
         let mut new_positions: Vec<(Vec<Move>, Position)> = Vec::new();
         for m_p in current_positions {
             let moves = m_p.0;
@@ -33,14 +39,13 @@ pub fn solve(position: Position, target: Robot) -> Vec<(Vec<Move>, Position)> {
                 new_moves.push(robot_move);
                 if is_solved(&new_position, &target) {
                     solved_positions.push((new_moves, new_position));
-                }
-                else if !visited_positions.contains(&new_position){
+                } else if !visited_positions.contains(&new_position) {
                     new_positions.push((new_moves, new_position));
                 }
-            };
+            }
             visited_positions.insert(pos);
-        };
+        }
         current_positions = new_positions;
-    };
+    }
     solved_positions
 }

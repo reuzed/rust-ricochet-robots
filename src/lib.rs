@@ -1,3 +1,3 @@
-pub mod routes;
 pub mod robots;
+pub mod routes;
 use robots::*;
