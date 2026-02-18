@@ -15,12 +15,14 @@ const MAX_MOVES: u32 = 20;
 // Do BFS, try all moves until finding a winning position
 pub fn solve(position: Position, target: Robot) -> Vec<(Vec<Move>, Position)> {
     // If robot is in winning position done
-    let mut visited_positions: HashSet<Position> = HashSet::new();
-    let mut current_positions: Vec<(Vec<Move>, Position)> = vec![(Vec::new(), position)];
+    let mut visited_positions: HashSet<Position> = HashSet::with_capacity(100_000);
+    let mut current_positions: Vec<(Vec<Move>, Position)> = Vec::with_capacity(100_000);
+    current_positions.push((Vec::new(), position));
     let mut solved_positions: Vec<(Vec<Move>, Position)> = Vec::new();
     let start_time = std::time::Instant::now();
     for i in 0..MAX_MOVES {
-        println!("Move number {i}. Visited: {}, Current: {}, Solved: {}, Time: {:?}", visited_positions.len(), current_positions.len(), solved_positions.len(), start_time.elapsed());
+        println!("Move number {i}. Visited: {}, Current: {}, Solved: {}, Time: {:?}, Log current: {}", 
+          visited_positions.len(), current_positions.len(), solved_positions.len(), start_time.elapsed(), f32::log(current_positions.len() as f32, 20.0));
         let mut new_positions: Vec<(Vec<Move>, Position)> = Vec::new();
         for m_p in current_positions {
             let moves = m_p.0;

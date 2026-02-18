@@ -219,7 +219,7 @@ impl Position {
     pub fn moves(&self) -> Vec<Move> {
         // For each robot consider each cardinal direction
         // If moving in that direction does not leave them stuck, add to moveset.
-        let mut moveset: Vec<Move> = vec![];
+        let mut moveset: Vec<Move> = Vec::with_capacity(4 * 5); // 4 directions, 5 robots
         for robot in &self.robots {
             for direction in [CardinalDirection::Down, CardinalDirection::Left, CardinalDirection::Up, CardinalDirection::Right] {
                 let robot_name = robot.name;
