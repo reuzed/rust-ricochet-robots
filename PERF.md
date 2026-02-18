@@ -34,3 +34,10 @@ Move number 3. Visited: 304, Current: 4617, Solved: 0, Time: 33.223139ms, Log cu
 Move number 4. Visited: 3888, Current: 64568, Solved: 0, Time: 423.231252ms, Log current: 3.697084
 Move number 5. Visited: 38412, Current: 796791, Solved: 0, Time: 5.971249215s, Log current: 4.5359015
 Move number 6. Visited: 282787, Current: 8453116, Solved: 0, Time: 75.154204164s, Log current: 5.324256
+
+New solver approach:
+Move number (1) 0. Visited: 1, Current: 0, Solved: 0, Time: 810ns
+Move number (2) 1. Visited: 19, Current: 17, Solved: 0, Time: 57.347µs
+Move number (3) 19. Visited: 304, Current: 284, Solved: 0, Time: 3.176123ms
+Move number (4) 304. Visited: 3888, Current: 3583, Solved: 0, Time: 431.13857ms
+Move number (5) 3888. Visited: 38412, Current: 34523, Solved: 0, Time: 47.210800057s

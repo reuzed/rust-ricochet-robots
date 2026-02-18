@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet, VecDeque};
 
 use super::grid::{Move, Position, Robot};
 
@@ -9,18 +9,6 @@ fn is_solved(position: &Position, target: &Robot) -> bool {
         }
     }
     false
-}
-
-
-enum PositionState {
-    Unexplored,
-    Explored,
-    Solved,
-}
-
-struct PostitionData<'a>{
-    prev: Option<&'a Position>,
-    state: PositionState,
 }
 
 const MAX_MOVES: u32 = 20;
@@ -60,4 +48,77 @@ pub fn solve(position: Position, target: Robot) -> Vec<(Vec<Move>, Position)> {
         current_positions = new_positions;
     }
     solved_positions
+}
+
+#[derive(PartialEq, Eq)]
+enum PositionState {
+    Unexplored,
+    Explored,
+    Solved,
+}
+
+pub struct BfsData {
+    positions: Vec<Position>,
+    // positions_hash: HashSet<Position>,
+    queue: VecDeque<usize>,
+    prev: HashMap<usize, usize>,
+    state: HashMap<usize, PositionState>,
+}
+
+impl BfsData {
+    fn solved_positions(&self) -> Vec<Position> {
+        self.positions.iter().enumerate().filter(
+            |&(i, _)| self.state.get(&i) == Some(&PositionState::Solved)
+        ).map(|(_, p)| p.clone()).collect()
+    }
+    fn solutions_count(&self) -> usize {
+        self.positions.iter().enumerate().filter(
+            |&(i, _)| self.state.get(&i) == Some(&PositionState::Solved)
+        ).count()
+    }
+}
+
+pub fn solve_2(position: Position, target: Robot) -> BfsData { 
+    let mut data = BfsData {
+        positions: vec![position.clone()],
+        queue: VecDeque::from([0]),
+        prev: HashMap::new(),
+        state: HashMap::new(),
+    };
+
+    let mut new_move_count_index = 0;
+
+    let start_time = std::time::Instant::now();
+    while let Some(i) = data.queue.pop_front() {
+        if i == new_move_count_index {
+            new_move_count_index = data.positions.len();
+            println!(
+            "Move number {i}. Visited: {}, Current: {}, Solved: {}, Time: {:?}",
+            data.positions.len(),
+            data.queue.len(),
+            data.solutions_count(),
+            start_time.elapsed(),
+            );
+        }
+        
+        let pos = &data.positions[i].clone();
+        if is_solved(&pos, &target) {
+            println!("Solved !");
+            data.state.insert(i, PositionState::Solved);
+        }
+        else {
+            data.state.insert(i, PositionState::Explored);
+        }
+        for robot_move in pos.moves() {
+            let new_position = pos.make_move(&robot_move);
+            if data.positions.contains(&new_position) {
+                continue
+            } 
+            let j = data.positions.len(); // Index of new position in data.positions
+            data.queue.push_back(j); // Queue new position for processing
+            data.positions.push(new_position); // Add the position
+            data.prev.insert(j, i); // Link to where the position came from
+        }
+    }
+    data
 }
