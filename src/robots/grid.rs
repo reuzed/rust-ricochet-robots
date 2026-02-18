@@ -2,7 +2,7 @@
 
 use std::{collections::HashMap, fmt};
 
-#[derive(PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub enum Direction {
     Horizontal, 
     Vertical,
@@ -33,7 +33,7 @@ impl CardinalDirection {
     }
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Coord {
     x: usize,
     y: usize,
@@ -45,7 +45,7 @@ impl fmt::Debug for Coord {
 }
 
 // A horizontal wall blocks horizontal movement so is rendered vertically 
-#[derive(PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct Wall {
     direction: Direction,
     coord: Coord,
@@ -60,6 +60,7 @@ impl Wall {
     }
 }
 
+#[derive(PartialEq, Eq, Debug)]
 #[derive(Clone)]
 pub struct Grid {
     width: usize,
@@ -67,8 +68,15 @@ pub struct Grid {
     walls: Vec<Wall>,
     pub move_maps: HashMap<CardinalDirection, Vec<Vec<Coord>>>
 }
+impl std::hash::Hash for Grid {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.width.hash(state);
+        self.height.hash(state);
+        self.walls.hash(state);
+    }
+}
 
-#[derive(PartialEq, Eq, Clone, Copy)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum RobotName {
     Red,
     Green,
@@ -77,16 +85,33 @@ pub enum RobotName {
     Silver,
 }
 
-#[derive(Clone)]
+// Type for robots and targets
+#[derive(Clone, PartialEq, Eq, Hash,Debug)]
 pub struct Robot {
     name: RobotName,
     pos: Coord,
 }
-pub struct Position {
-    grid: Grid,
-    robots: Vec<Robot>,
+impl Robot {
+    pub fn new(
+        name: RobotName, x: usize, y: usize
+    ) -> Robot
+    {
+        Robot{name, pos:Coord { x, y }}
+    }
 }
 
+#[derive(PartialEq, Eq, Hash, Clone, Debug)]
+pub struct Position {
+    pub grid: Grid,
+    pub robots: Vec<Robot>,
+}
+impl fmt::Display for Position {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Grid:\n{} Robots:\n{:?}", self.grid, self.robots)
+    }
+}
+
+#[derive(Clone, Debug)]
 pub struct Move {
     name: RobotName,
     start: Coord,
@@ -175,12 +200,12 @@ impl Position {
             }},
             CardinalDirection::Right =>{for robot in &self.robots {
                 if robot.pos.y == unconstrained_end.y && start.x < robot.pos.x && robot.pos.x <= unconstrained_end.x {
-                    unconstrained_end.y = robot.pos.y - 1;
+                    unconstrained_end.y = robot.pos.x - 1;
                 }
             }},
             CardinalDirection::Left =>{for robot in &self.robots {
                 if robot.pos.y == unconstrained_end.y && start.x > robot.pos.x && robot.pos.x >= unconstrained_end.x {
-                    unconstrained_end.y = robot.pos.y + 1;
+                    unconstrained_end.y = robot.pos.x + 1;
                 }
             }},
         };
@@ -209,8 +234,8 @@ impl Position {
         moveset
     }
 
-    pub fn make_move(&self, robot_move: Move) -> Position {
-        let mut robots: Vec<Robot> = self.robots.clone().into_iter().filter(|r| r.name == robot_move.name).collect();
+    pub fn make_move(&self, robot_move: &Move) -> Position {
+        let mut robots: Vec<Robot> = self.robots.clone().into_iter().filter(|r| r.name != robot_move.name).collect();
         robots.push(Robot { name: robot_move.name, pos: robot_move.end });
         Position { grid: self.grid.clone(), robots: robots }
     }
