@@ -2,6 +2,15 @@
 
 rust-ricochet-robots is a Rust project that implements an AWS Lambda function in Rust.
 
+## References:
+
+Some other references:
+
+- https://github.com/Lireer/ricochet-robot-solver
+- https://meeplescorner.co.uk/products/ricochet-robots?srsltid=AfmBOopGXyq3Y0yw_zf8iaN0-8CTSouOIdTEIFYgmPO3YKBQ6F1eITqv
+- https://en.wikipedia.org/wiki/Ricochet_Robots
+- https://www.boardgamegeek.com/filepage/4477/rasende-roboterdoc
+
 ## Prerequisites
 
 - [Rust](https://www.rust-lang.org/tools/install)
